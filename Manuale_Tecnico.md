@@ -65,7 +65,7 @@ Tutti gli host appartengono alla stessa rete e possono comunicare tra loro trami
 Questa configurazione è utile per simulare ambienti di rete domestici o piccoli uffici, dove tutti i dispositivi condividono lo stesso segmento di rete.
 
 ### 2.2 Morfologia
-![Morfologia Rete 1 PC](img/Morfologia_Rete1.jpg)
+![Morfologia Rete 1](img/Morfologia_Rete1.jpg)
 
 ### 2.3 Realizzazione fisica della rete
 Per iniziare, inserire nel progetto un PC, un computer e un server. Questi dispositivi si trovano nella palette dei dispositivi, nella sezione **End Devices** → **End Devices**.  
@@ -74,10 +74,43 @@ Successivamente, aggiungere uno switch dalla sezione **Network Devices** → **S
 
 Infine, collegare tutti gli host allo switch utilizzando i cavi. È possibile utilizzare la scelta automatica del cavo per semplificare il collegamento.
 
-![rete_fisica](img/rete_fisica.png)
+![rete_fisica 1](img/rete_fisica1.png)
 
 ### 2.4 Configurazione degli IP e delle maschere
 
 Come si può notare dall'immagine sopra, i collegamenti allo switch sono segnati in arancione. Questo indica che la comunicazione non funzionerebbe correttamente se provassimo a simularla in questo momento, perché non sono stati ancora assegnati IP e maschere agli host.  
 
 Procederemo creando una rete di tipo **C**, con **24 bit per la rete** e **8 bit per gli host**, utilizzando la maschera **255.255.255.0**. L'indirizzo di rete scelto sarà **192.168.1.0**, e agli host assegneremo gli IP seguenti: **192.168.1.1** al PC, **192.168.1.11** al computer e **192.168.1.101** al server.
+
+## 3 Due reti LAN: 1 router interfacciato a 2 switch
+
+### 3.1 Descrizione
+In questo esempio si realizza una **topologia con due reti LAN separate**, ciascuna collegata a uno **switch**, e con un **router** che permette la comunicazione tra le due reti.  
+Ogni LAN è composta da più host che comunicano tra loro tramite lo switch locale, mentre il router gestisce l'instradamento dei dati tra le due reti.  
+Questa configurazione è utile per simulare ambienti di rete più complessi, come uffici con più reparti o segmenti di rete separati, che necessitano di collegamento tramite un dispositivo di routing.
+
+### 3.2 Morfologia
+![Morfologia Rete 2](img/Morfologia_Rete2.jpg)
+
+### 3.3 Realizzazione fisica della rete
+
+Per cominciare, inserire nel progetto due PC, due computer e due server. Questi dispositivi si trovano nella palette dei dispositivi, nella sezione **End Devices** → **End Devices**.  
+
+Aggiungere poi due switch dalla sezione **Network Devices** → **Switches** e un router dalla sezione **Network Devices** → **Routers**.  
+
+Infine, effettuare i collegamenti fisici tra gli host e gli switch, e collegare gli switch al router centrale. È possibile utilizzare la funzione di selezione automatica del cavo per semplificare l’operazione, ma è importante collegare il router utilizzando le porte **GigabitEthernet**.
+
+
+![rete_fisica](img/rete_fisica2.png)
+
+### 3.4 Configurazione degli IP e delle maschere
+
+Per rendere operativa la rete, è necessario configurare gli host. Entrambe le reti saranno di tipo **C** con maschera **255.255.255.0**. Alla **rete 1** viene assegnato l'indirizzo di rete **192.168.1.0**, mentre alla **rete 2** l'indirizzo **192.168.2.0**.  
+
+Per quanto riguarda gli host, in entrambe le reti i PC avranno l'IP **1**, i computer **11** e i server **101**.
+
+Successivamente, si passa alla configurazione del router, che avrà due indirizzi IP: uno per ciascuna rete a cui è collegato. Nella **rete 1** assegneremo al router l'IP **192.168.1.254**, mentre nella **rete 2** l'IP sarà **192.168.2.254**.  
+
+È inoltre necessario abilitare le porte del router utilizzate per il collegamento agli switch. Per farlo, accedere alle impostazioni del router, andare nella sezione **Config** → **Interface**, selezionare la porta desiderata e attivare la casella **Port Status** impostandola su **On**.  
+
+Infine, in ogni host, accedere alla sezione **Config** e impostare come **Default Gateway** l'IP del router corrispondente alla rete a cui l'host appartiene.
