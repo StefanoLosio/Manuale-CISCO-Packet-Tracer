@@ -114,3 +114,57 @@ Successivamente, si passa alla configurazione del router, che avrà due indirizz
 È inoltre necessario abilitare le porte del router utilizzate per il collegamento agli switch. Per farlo, accedere alle impostazioni del router, andare nella sezione **Config** → **Interface**, selezionare la porta desiderata e attivare la casella **Port Status** impostandola su **On**.  
 
 Infine, in ogni host, accedere alla sezione **Config** e impostare come **Default Gateway** l'IP del router corrispondente alla rete a cui l'host appartiene.
+
+## 4 Tre reti LAN: 3 router collegati ad anello
+
+### 4.1 Descrizione
+
+In questo scenario si realizza una topologia composta da **tre reti LAN distinte**, ciascuna collegata a un **router**. I tre router sono interconnessi tra loro in una **configurazione ad anello**, che consente a ogni rete di comunicare con le altre attraverso più percorsi possibili.  
+
+Questa tipologia di rete permette di studiare il funzionamento dell'instradamento tra più router e di analizzare come i pacchetti vengano inoltrati all'interno di una topologia chiusa. È una configurazione utile per comprendere concetti avanzati di routing e ridondanza delle connessioni.
+
+
+### 4.2 Morfologia
+![Morfologia Rete 3](img/Morfologia_Rete3.jpg)
+
+### 4.3 Realizzazione fisica della rete
+
+All'inizio, inserire nel progetto tre PC, tre computer e tre server, selezionabili dalla palette dei dispositivi nella sezione **End Devices** → **End Devices**.  
+
+Successivamente, aggiungere tre switch dalla sezione **Network Devices** → **Switches** e tre router dalla sezione **Network Devices** → **Routers**.  
+
+Una volta posizionati tutti i dispositivi, realizzare i collegamenti fisici tra gli host e gli switch, collegare ciascuno switch al router associato e infine connettere i router tra loro formando una struttura ad anello. È possibile utilizzare la selezione automatica del cavo per velocizzare l’operazione, prestando però attenzione a utilizzare le porte **GigabitEthernet** per i collegamenti dei router.
+
+
+
+![rete_fisica](img/rete_fisica3.png)
+
+### 4.4 Configurazione degli IP e delle maschere
+
+Per garantire il corretto funzionamento della rete, è necessario configurare gli host. Le tre LAN presenti nella topologia sono di tipo **C**, ciascuna con maschera **255.255.255.0**. Gli indirizzi di rete assegnati sono **192.168.1.0** per la prima rete, **192.168.2.0** per la seconda e **192.168.3.0** per la terza.  
+
+Per gli host, in ogni rete i PC avranno l'indirizzo **.1**, i computer **.11** e i server **.101**.  
+
+Successivamente, si passa alla configurazione dei router. Ogni router riceverà un indirizzo IP appartenente alla rete a cui è collegato: **192.168.1.254**, **192.168.2.254** e **192.168.3.254**.  
+
+È necessario inoltre abilitare le interfacce dei router utilizzate per i collegamenti. Per farlo, accedere alle impostazioni del router, entrare in **Config → Interface**, selezionare l’interfaccia desiderata e attivare il **Port Status** impostandolo su **On**.  
+
+Infine, su ciascun host, accedere alla sezione **Config** e impostare come **Default Gateway** l’indirizzo IP del router della rete di appartenenza.
+
+---
+
+Per consentire la comunicazione tra le reti, occorre creare una **rete dedicata per ciascuna coppia di router**. Queste reti agiscono come collegamenti diretti tra i router e permettono il passaggio dei dati tra le LAN collegate a ciascun router.
+
+Dopo aver realizzato le reti di interconnessione, è necessario configurare il **routing statico** su ciascun router. Il routing statico permette di specificare manualmente quale percorso utilizzare per raggiungere una rete remota. La configurazione avviene nel seguente modo:
+
+1. Accedere alle impostazioni del router e andare in **Config → Routing → Static**.  
+2. Per ogni rete remota da raggiungere tramite un altro router, inserire i seguenti parametri:  
+   - **Network**: l’indirizzo della rete remota da raggiungere.  
+   - **Next Hop**: l’indirizzo IP del router collegato direttamente alla sottorete di interconnessione tra i due router. Questo rappresenta il “punto di accesso” per raggiungere la rete remota.  
+   - **Mask**: la maschera della rete remota.
+
+Ad esempio, se il Router A deve raggiungere la rete del Router B tramite una rete intermedia **192.168.4.0/24**, nel campo **Network** si inserisce l’indirizzo della rete di Router B (**192.168.2.0**), in **Next Hop** l’IP del Router B sulla rete di collegamento (**192.168.4.2**) e in **Mask** la maschera della rete remota (**255.255.255.0**).
+
+Questa configurazione va ripetuta per tutte le coppie di router, in modo che ogni router sappia come raggiungere tutte le reti collegate agli altri. In questo modo, tutte le LAN della topologia ad anello possono comunicare correttamente.
+
+![router conf ](img/router_conf.png)
